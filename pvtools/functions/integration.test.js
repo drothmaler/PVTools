@@ -7,7 +7,7 @@ const string2url = 'https://re.jrc.ec.europa.eu/api/v5_2/seriescalc?lat=45&lon=8
 
 
 
-describe.skip('integration', () => {
+describe('integration', () => {
     let results1, results2, consumption, normResult1, normResult2, mergedPower, powerGenAndConsumption
 
     beforeAll(async () => {
