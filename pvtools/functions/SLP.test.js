@@ -16,15 +16,15 @@ describe('test SPL functions', () => {
         expect(typeof results).toBe('object')
     })
     test('one result should have the following key and value', () => {
-        
+
         const results = calcProfile({year: 1996, consumptionYear: 5000, profile: SLPH0, profileBase:PROFILEBASE, factorFunction})
-        
+
         expect(results['19960601:02'].P.toFixed(5)).toBe((45.840113499345804 * 5).toFixed(5))
     })
-    test('full powerconsumption of is near the input consumption with max 1% defference', () => {
-        
+    test('full power consumption of is near the input consumption with max 1% difference', () => {
+
         const power = Object.values(results).reduce((prev, curr) => prev + curr.P,0)
-        
+
         expect(power > 5000*1000*0.9 && power < 5000*1000*1.1).toBeTruthy()
     })
 

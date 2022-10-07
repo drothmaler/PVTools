@@ -7,26 +7,25 @@ const string2url = 'https://re.jrc.ec.europa.eu/api/v5_2/seriescalc?lat=45&lon=8
 
 
 
-describe.skip('intertation', () => {
+describe.skip('integration', () => {
     let results1, results2, consumption, normResult1, normResult2, mergedPower, powerGenAndConsumption
-    
+
     beforeAll(async () => {
         jest.setTimeout(10000)
-        results1 = await axios.get(string1url).then(res => res.data) 
-        results2 = await axios.get(string2url).then(res => res.data) 
+        results1 = await axios.get(string1url).then(res => res.data)
+        results2 = await axios.get(string2url).then(res => res.data)
         normResult1 = normalizeHourlyRadiation(results1.outputs.hourly)
         normResult2 = normalizeHourlyRadiation(results2.outputs.hourly)
         mergedPower = mergePowerGeneration([normResult1, normResult2])
 
-        
         consumption = calculateConsumption({year:2020,consumptionYear:6000,profile:SLPH0, profileBase:PROFILEBASE, factorFunction})
         powerGenAndConsumption = generateDayTimeValues({consumption,powerGeneration:mergedPower, year: 2020})
 
-        
-    })    
 
-    
-    test('get data from PVGis seariescalc', async () => {
+    })
+
+
+    test('get data from PVGis series-calc', async () => {
 
         expect(results1.outputs.hourly.length).toBe(8784)  //leap year
         expect(results2.outputs.hourly.length).toBe(8784)  //leap year
@@ -96,8 +95,8 @@ describe.skip('intertation', () => {
             selfUsagePowerPv: 885.0214310934527,
         })
     })
-    test('energyFlow calc year consumption and geeneration', () => {
-        
+    test('energyFlow calc year consumption and generation', () => {
+
         let newSoc = 5000
         const energyFlowData = powerGenAndConsumption.map(genConsumption => {
             const hourFlow = energyFlow({
@@ -106,7 +105,7 @@ describe.skip('intertation', () => {
                 batterySoc: newSoc,
                 batterySocMax: 5000,
                 batterySocMin:100
-            }) 
+            })
             newSoc = hourFlow.newBatterySoc
             return hourFlow
         })

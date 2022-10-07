@@ -18,7 +18,6 @@ describe('read csv file', ()=> {
     //     // fs.writeFileSync(__dirname+'/TEST.csv',csv)
     //     expect(csv.length).toBe(2333)
     // })
-    
 })
 
 

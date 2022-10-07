@@ -22,7 +22,6 @@ if (ENV === 'production') {
   app.use(cors({
     origin: true
   }))
-  
 }
 
 

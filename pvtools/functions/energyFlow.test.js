@@ -19,12 +19,12 @@ describe('testNormalize function',()=>{
 
 describe('PV > Consumption',() => {
     test('pv generation is more than consumption, battery is loading', () => {
-        const data = energyFlow({   
-                    powerGeneration: 5000, 
-                    powerConsumption: 4000, 
-                    batterySoc: 5000, 
-                    batterySocMax: 10000, 
-                    batterySocMin: 100, 
+        const data = energyFlow({
+                    powerGeneration: 5000,
+                    powerConsumption: 4000,
+                    batterySoc: 5000,
+                    batterySocMax: 10000,
+                    batterySocMin: 100,
                     batteryEfficiency: .99
                 })
         expect(data).toEqual({
@@ -41,14 +41,14 @@ describe('PV > Consumption',() => {
             dayTime: "",
         })
     })
-    
+
     test('pv generation is more than consumption, max battery power load is lower than generation and split in feed in and load', () => {
-        const data = energyFlow({   
-                    powerGeneration: 5000, 
-                    powerConsumption: 0, 
-                    batterySoc: 5000, 
-                    batterySocMax: 8000, 
-                    batterySocMin: 100, 
+        const data = energyFlow({
+                    powerGeneration: 5000,
+                    powerConsumption: 0,
+                    batterySoc: 5000,
+                    batterySocMax: 8000,
+                    batterySocMin: 100,
                     batteryEfficiency: .99,
                     maxPowerLoadBattery: 2000
                 })
@@ -66,14 +66,14 @@ describe('PV > Consumption',() => {
             dayTime:""
         })
     })
-    
+
     test('pv generation is more than consumption, max battery power load is lower than generation, only load in battery', () => {
-        const data = energyFlow({   
-                    powerGeneration: 5000, 
-                    powerConsumption: 2000, 
-                    batterySoc: 5000, 
-                    batterySocMax: 8000, 
-                    batterySocMin: 100, 
+        const data = energyFlow({
+                    powerGeneration: 5000,
+                    powerConsumption: 2000,
+                    batterySoc: 5000,
+                    batterySocMax: 8000,
+                    batterySocMin: 100,
                     batteryEfficiency: .99,
                     maxPowerLoadBattery: 2000
                 })
@@ -91,14 +91,14 @@ describe('PV > Consumption',() => {
             dayTime:""
         })
     })
-    
+
     test('pv generation is more than inverter max power generation', () => {
-        const data = energyFlow({   
-                    powerGeneration: 5000, 
-                    powerConsumption: 4000, 
-                    batterySoc: 5000, 
-                    batterySocMax: 10000, 
-                    batterySocMin: 100, 
+        const data = energyFlow({
+                    powerGeneration: 5000,
+                    powerConsumption: 4000,
+                    batterySoc: 5000,
+                    batterySocMax: 10000,
+                    batterySocMin: 100,
                     batteryEfficiency: .99,
                     maxPowerGenerationInverter: 4500
                 })
@@ -116,14 +116,14 @@ describe('PV > Consumption',() => {
             dayTime:""
         })
     })
-    
+
     test('pv generation is more than consumption, battery load efficiency diff than unload', () => {
-        const data = energyFlow({   
-                    powerGeneration: 5000, 
-                    powerConsumption: 4000, 
-                    batterySoc: 5000, 
-                    batterySocMax: 10000, 
-                    batterySocMin: 100, 
+        const data = energyFlow({
+                    powerGeneration: 5000,
+                    powerConsumption: 4000,
+                    batterySoc: 5000,
+                    batterySocMax: 10000,
+                    batterySocMin: 100,
                     batteryLoadEfficiency: .95,
                     batteryEfficiency: .99 // unload as default
                 })
@@ -141,14 +141,14 @@ describe('PV > Consumption',() => {
             dayTime:""
         })
     })
-    
+
     test('pv generation is more than consumption, battery is full, power is feed in', () => {
-        const data = energyFlow({   
-                    powerGeneration: 5000, 
-                    powerConsumption: 4000, 
-                    batterySoc: 5000, 
-                    batterySocMax: 5000, 
-                    batterySocMin: 100, 
+        const data = energyFlow({
+                    powerGeneration: 5000,
+                    powerConsumption: 4000,
+                    batterySoc: 5000,
+                    batterySocMax: 5000,
+                    batterySocMin: 100,
                     batteryEfficiency: .99
                 })
         expect(data).toEqual({
@@ -165,13 +165,13 @@ describe('PV > Consumption',() => {
             dayTime:""
         })
     })
-    test('pv generation is more than consumption, battery is full, power is feed in, max feedin power less then generation', () => {
-        const data = energyFlow({   
-                    powerGeneration: 5000, 
-                    powerConsumption: 2000, 
-                    batterySoc: 5000, 
-                    batterySocMax: 5000, 
-                    batterySocMin: 100, 
+    test('pv generation is more than consumption, battery is full, power is feed in, max feed-in power less then generation', () => {
+        const data = energyFlow({
+                    powerGeneration: 5000,
+                    powerConsumption: 2000,
+                    batterySoc: 5000,
+                    batterySocMax: 5000,
+                    batterySocMin: 100,
                     batteryEfficiency: .99,
                     maxPowerFeedIn: 2000
                 })
@@ -189,14 +189,14 @@ describe('PV > Consumption',() => {
             dayTime:""
         })
     })
-    
-    test('pv generation is more than consumption, battery will be fullfilled, diff power is feed in', () => {
-        const data = energyFlow({   
-                    powerGeneration: 5000, 
-                    powerConsumption: 4000, 
-                    batterySoc: 5000, 
-                    batterySocMax: 5500, 
-                    batterySocMin: 100, 
+
+    test('pv generation is more than consumption, battery will be fulfilled, diff power is feed in', () => {
+        const data = energyFlow({
+                    powerGeneration: 5000,
+                    powerConsumption: 4000,
+                    batterySoc: 5000,
+                    batterySocMax: 5500,
+                    batterySocMin: 100,
                     batteryEfficiency: .99
                 })
         expect(data).toEqual({
@@ -213,17 +213,17 @@ describe('PV > Consumption',() => {
             dayTime:""
         })
     })
-    
+
 })
 
 describe('PV < Consumption', () => {
     test('pv generation is less than consumption, battery is discharging', () => {
-        const data = energyFlow({   
-                    powerGeneration: 5000, 
-                    powerConsumption: 6000, 
-                    batterySoc: 5000, 
-                    batterySocMax: 10000, 
-                    batterySocMin: 100, 
+        const data = energyFlow({
+                    powerGeneration: 5000,
+                    powerConsumption: 6000,
+                    batterySoc: 5000,
+                    batterySocMax: 10000,
+                    batterySocMin: 100,
                     batteryEfficiency: .99
                 })
         expect(data).toEqual({
@@ -241,13 +241,13 @@ describe('PV < Consumption', () => {
         })
     })
 
-    test('pv generation is less than consumption, battery is discharging, Batterypower is lower then consumption', () => {
-        const data = energyFlow({   
-                    powerGeneration: 3000, 
-                    powerConsumption: 6000, 
-                    batterySoc: 5000, 
-                    batterySocMax: 10000, 
-                    batterySocMin: 100, 
+    test('pv generation is less than consumption, battery is discharging, Battery power is lower then consumption', () => {
+        const data = energyFlow({
+                    powerGeneration: 3000,
+                    powerConsumption: 6000,
+                    batterySoc: 5000,
+                    batterySocMax: 10000,
+                    batterySocMin: 100,
                     batteryEfficiency: .99,
                     maxPowerGenerationBattery: 1000
                 })
@@ -265,14 +265,14 @@ describe('PV < Consumption', () => {
             dayTime:""
         })
     })
-   
-    test('pv generation is less than consumption, battery is discharging, Batterypower is lower then consumption, battery will be empty', () => {
-        const data = energyFlow({   
-                    powerGeneration: 3000, 
-                    powerConsumption: 6000, 
-                    batterySoc: 3000, 
-                    batterySocMax: 10000, 
-                    batterySocMin: 100, 
+
+    test('pv generation is less than consumption, battery is discharging, Battery power is lower then consumption, battery will be empty', () => {
+        const data = energyFlow({
+                    powerGeneration: 3000,
+                    powerConsumption: 6000,
+                    batterySoc: 3000,
+                    batterySocMax: 10000,
+                    batterySocMin: 100,
                     batteryEfficiency: .99,
                     maxPowerGenerationBattery: 1000
                 })
@@ -290,14 +290,14 @@ describe('PV < Consumption', () => {
             dayTime:""
         })
     })
-    
-    test('pv generation is less than consumption, battery unload efficiency is differnt then load', () => {
-        const data = energyFlow({   
-                    powerGeneration: 5000, 
-                    powerConsumption: 6000, 
-                    batterySoc: 5000, 
-                    batterySocMax: 10000, 
-                    batterySocMin: 100, 
+
+    test('pv generation is less than consumption, battery unload efficiency is different then load', () => {
+        const data = energyFlow({
+                    powerGeneration: 5000,
+                    powerConsumption: 6000,
+                    batterySoc: 5000,
+                    batterySocMax: 10000,
+                    batterySocMin: 100,
                     batteryEfficiency: .99,
                     batteryUnloadEfficiency: .80
                 })
@@ -315,14 +315,14 @@ describe('PV < Consumption', () => {
             dayTime:""
         })
     })
-    
-    test('pv generation is less than consumption, battery is empty, cunsumpion from grid', () => {
-        const data = energyFlow({   
-                    powerGeneration: 5000, 
-                    powerConsumption: 6000, 
-                    batterySoc: 100, 
-                    batterySocMax: 10000, 
-                    batterySocMin: 100, 
+
+    test('pv generation is less than consumption, battery is empty, consumption from grid', () => {
+        const data = energyFlow({
+                    powerGeneration: 5000,
+                    powerConsumption: 6000,
+                    batterySoc: 100,
+                    batterySocMax: 10000,
+                    batterySocMin: 100,
                     batteryEfficiency: .99
                 })
         expect(data).toEqual({
@@ -339,14 +339,14 @@ describe('PV < Consumption', () => {
             dayTime:""
         })
     })
-    
-    test('pv generation is less than consumption, battery is nearly empty, diff cunsumpion from grid', () => {
-        const data = energyFlow({   
-                    powerGeneration: 5000, 
-                    powerConsumption: 6000, 
-                    batterySoc: 1000, 
-                    batterySocMax: 10000, 
-                    batterySocMin: 500, 
+
+    test('pv generation is less than consumption, battery is nearly empty, diff consumption from grid', () => {
+        const data = energyFlow({
+                    powerGeneration: 5000,
+                    powerConsumption: 6000,
+                    batterySoc: 1000,
+                    batterySocMax: 10000,
+                    batterySocMin: 500,
                     batteryEfficiency: .99
                 })
         expect(data).toEqual({
@@ -372,7 +372,7 @@ describe('PV < Consumption', () => {
 
 
 describe('norm hourly radiation', () => {
-    
+
     test('result is an object', () => {
         expect(typeof normalizedHR).toBe('object')
     })
@@ -384,7 +384,7 @@ describe('norm hourly radiation', () => {
     test('results should be the right length in leap year 2020', () => {
         expect(Object.keys(normalizedHR).length).toBe(366 * 24)
     })
-    test('results conatain the right power generation', () => {
+    test('results contain the right power generation', () => {
         // {
         //     "time": "20200308:1310",
         //     "P": 1365630.0,
@@ -403,7 +403,7 @@ describe('norm hourly radiation', () => {
 
 
 
-describe('merge powergeneration arrays', () => {
+describe('merge power generation arrays', () => {
     const result = mergePowerGeneration([normalizedHR,normalizedHR2])
     const oneResult = mergePowerGeneration([normalizedHR])
 
@@ -428,7 +428,7 @@ describe('merge powergeneration arrays', () => {
     test('the summarized value af key is correct', () => {
         expect(result['20200515:14'].P).toBe(7332.96)
     })
-  
+
 
 })
 
@@ -448,10 +448,10 @@ describe('merge powergeneration arrays', () => {
 //         const result = energyFlow({
 //             powerGeneration: mergedPowerGeneration[dayTime].P, //473.34000000000003
 //             powerConsumption: consumption[dayTime].P, //3093.3675000000003
-//             batterySoc:5000, 
-//             batterySocMax: 10000, 
-//             batterySocMin: 100, 
-//             batteryEfficiency: .99, 
+//             batterySoc:5000,
+//             batterySocMax: 10000,
+//             batterySocMin: 100,
+//             batteryEfficiency: .99,
 //         })
 //         expect(consumption[dayTime].P).toBe(3093.3675000000003)
 //         expect(mergedPowerGeneration[dayTime].P).toBe(473.34000000000003)
@@ -469,9 +469,9 @@ describe('merge powergeneration arrays', () => {
 //              })
 
 //     })
-    
+
 //     test('test a year in energy flow', () => {
-        
+
 //         let yearSum = {
 //             "batteryLoad": 0,
 //             "consumptionGrid": 0,
@@ -488,12 +488,12 @@ describe('merge powergeneration arrays', () => {
 //         dayTimeOrder.forEach(key => {
 
 //             const result = energyFlow({
-//                 powerGeneration: mergedPowerGeneration[key].P, 
-//                 powerConsumption: consumption[key].P, 
-//                 batterySoc: yearSum.newBatterySoc, 
-//                 batterySocMax: 20000, 
-//                 batterySocMin: 100, 
-//                 batteryEfficiency: .99, 
+//                 powerGeneration: mergedPowerGeneration[key].P,
+//                 powerConsumption: consumption[key].P,
+//                 batterySoc: yearSum.newBatterySoc,
+//                 batterySocMax: 20000,
+//                 batterySocMin: 100,
+//                 batteryEfficiency: .99,
 //             })
 
 //             yearSum.batteryLoad = yearSum.batteryLoad + result.batteryLoad
@@ -506,8 +506,8 @@ describe('merge powergeneration arrays', () => {
 //             yearSum.selfUsagePowerBattery = yearSum.selfUsagePowerBattery + result.selfUsagePowerBattery
 //             yearSum.selfUsagePowerPv = yearSum.selfUsagePowerPv + result.selfUsagePowerPv
 //             yearSum.newBatterySoc = result.newBatterySoc
-        
-            
+
+
 //         })
 //         // expect(mergedPowerGeneration[dayTime].P).toBe(207450)
 //         // expect(consumption[dayTime].P).toBe(6874.150000000001)

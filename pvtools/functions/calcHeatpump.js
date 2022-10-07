@@ -1,9 +1,9 @@
 /**
  * Calculate heating curve
- * @param  {Object}  
+ * @param  {Object}
  *      @param  {Number} maxHeatTemp        max temperature to calc
  *      @param  {Number} minHeatTemp        Optional: min temperature to calc
- *      @param  {Array[Array]}   tempMap    Array of arrays with tempratures [ [0 , 40], [10 , 30] ] | First Value: outside, temprature, second value: water temprature
+ *      @param  {Array[Array]}   tempMap    Array of arrays with temperatures [ [0 , 40], [10 , 30] ] | First Value: outside, temperature, second value: water temperature
  * @return {Object}                         {'-25': 55, '-24': 54,5, ... '15': 35} minHeatTemp -25, maxHeatTemp 15
  */
 
@@ -24,10 +24,10 @@ const calcHeatingTempMap = ({maxHeatTemp = null, minHeatTemp = -25, tempMap}) =>
         const currTargetTemp = curr[1]
         const nextTargetTemp = arr.length - 1 > i ? arr[i + 1][1] : null
         const prevTargetTemp = i > 0 && arr.length > i ? arr[i - 1][1] : null
-        const factor = prevTemp == null ? 
+        const factor = prevTemp == null ?
         (nextTargetTemp - currTargetTemp) / (nextTemp - currTemp) :
         (currTargetTemp - prevTargetTemp) / (currTemp - prevTemp)
-        
+
         // console.log({currTemp,nextTemp,prevTemp,currTargetTemp,nextTargetTemp, prevTargetTemp, factor})
 
         if (i == 0){
@@ -44,7 +44,7 @@ const calcHeatingTempMap = ({maxHeatTemp = null, minHeatTemp = -25, tempMap}) =>
             }
         }
         return prev
-    }, {})  
+    }, {})
 
     return newTempMap
 }
@@ -59,12 +59,12 @@ const calcHeatEfficiencyMap = ({maxHeatTemp,minHeatTemp,maxTargetTemp,minTargetT
     if (!minTargetTemp) throw new Error('minTargetTemp not given')
     if (!efficiencyMap  ) throw new Error('efficiencyMap is not given')
     if (!Array.isArray(efficiencyMap) ) throw new Error('efficiencyMap is not an array')
-    
+
     const sameTemp = efficiencyMap.filter((val,i,arr) => arr.filter(v => v[0] == val[0]).length > 1 ).sort((a,b) => a[1] - b[1])
     const sameHeatTemp = efficiencyMap.filter((val,i,arr) => arr.filter(v => v[1] == val[1]).length > 1 ).sort((a,b) => a[0] - b[0])
-    
-    if (sameTemp.length < 2) throw new Error('efficiencyMap need two efficiency values with same temprature')
-    if (sameHeatTemp.length < 2) throw new Error('efficiencyMap need two efficiency values with same heat temprature')
+
+    if (sameTemp.length < 2) throw new Error('efficiencyMap need two efficiency values with same temperature')
+    if (sameHeatTemp.length < 2) throw new Error('efficiencyMap need two efficiency values with same heat temperature')
 
     const tempBase = sameTemp[0][0]
     const tempBaseEfficiency = sameTemp[0][2]
@@ -90,7 +90,7 @@ const calcHeatEfficiencyMap = ({maxHeatTemp,minHeatTemp,maxTargetTemp,minTargetT
     for (let i = minHeatTemp; i <= maxHeatTemp; i++) {
         tempTargetBaseMap[i] =  (i - tempBase) * efficiencyPerTemp + tempBaseEfficiency
     }
-    
+
     let newEfficiencyMap = Object.keys(tempTargetBaseMap).reduce((prev,curr) => {
         for (let temp = minTargetTemp; temp <= maxTargetTemp; temp++){
             let efficiencyLow = tempBaseEfficiency + (curr - tempBase) * efficiencyPerTemp
@@ -113,7 +113,7 @@ const calcHeatEfficiencyMap = ({maxHeatTemp,minHeatTemp,maxTargetTemp,minTargetT
 
 const calcDayHeat = ({tempArr, yearlyHeatConsumption}) => {
 
-    
+
 
 
 }

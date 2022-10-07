@@ -25,14 +25,14 @@ describe('calculate efficiency Map',() => {
         expect(() => calcHeatEfficiencyMap({maxHeatTemp:3, minHeatTemp:4, maxTargetTemp:4})).toThrow('minTargetTemp not given')
         expect(() => calcHeatEfficiencyMap({maxHeatTemp:3, minHeatTemp:4, maxTargetTemp:4, minTargetTemp:4})).toThrow('efficiencyMap is not given')
         expect(() => calcHeatEfficiencyMap({maxHeatTemp:3, minHeatTemp:4, maxTargetTemp:4, minTargetTemp:4, efficiencyMap:33})).toThrow('efficiencyMap is not an array')
-        expect(() => calcHeatEfficiencyMap({minHeatTemp: -25, maxHeatTemp: 18, minTargetTemp:30, maxTargetTemp:55, efficiencyMap:[[-7,35,3.14], [-7,55,2.13]] } )).toThrow('efficiencyMap need two efficiency values with same heat temprature')
-        expect(() => calcHeatEfficiencyMap({minHeatTemp: -25, maxHeatTemp: 18, minTargetTemp:30, maxTargetTemp:55, efficiencyMap:[[-7,35,3.14], [2,35,4.61]] } )).toThrow('efficiencyMap need two efficiency values with same temprature')
+        expect(() => calcHeatEfficiencyMap({minHeatTemp: -25, maxHeatTemp: 18, minTargetTemp:30, maxTargetTemp:55, efficiencyMap:[[-7,35,3.14], [-7,55,2.13]] } )).toThrow('efficiencyMap need two efficiency values with same heat temperature')
+        expect(() => calcHeatEfficiencyMap({minHeatTemp: -25, maxHeatTemp: 18, minTargetTemp:30, maxTargetTemp:55, efficiencyMap:[[-7,35,3.14], [2,35,4.61]] } )).toThrow('efficiencyMap need two efficiency values with same temperature')
 
     })
     test('test efficiency calculations', () => {
         const calc = calcHeatEfficiencyMap({minHeatTemp: -10, maxHeatTemp: 10, minTargetTemp:39, maxTargetTemp:40, efficiencyMap:[[2,35,4.61], [-7,55,2.13], [-7,35,3.14]] } )
         // const calc = calcHeatEfficiencyMap({minHeatTemp: -10, maxHeatTemp: 10, minTargetTemp:39, maxTargetTemp:40, efficiencyMap:[[-7,35,3.14], [-7,55,2.13], [2,35,4.61]] } )
-        
+
         expect(calc['39']['-2']).toBe(3.6418333333333335)
     })
 })
@@ -40,6 +40,6 @@ describe('calculate efficiency Map',() => {
 describe('calculate needed heat per day', () => {
     test('', () => {
 
-        
+
     })
 })

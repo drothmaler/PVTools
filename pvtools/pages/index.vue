@@ -12,7 +12,7 @@
       <b-col align-v="baseline" cols="auto">
         <form action="https://www.paypal.me/akkudoktor" method="post" target="_blank" class="paypal">
           <input type="hidden" name="hosted_button_id" value="RTXEPF475DBVA" />
-          <input type="image" src="/btn_support_LG.gif" border="0" name="submit" title="Unterstütze unsere Arbeit!"
+          <input type="image" src="/btn_support_LG.gif" style="border: 0" name="submit" title="Unterstütze unsere Arbeit!"
             alt="Spenden mit dem PayPal-Button" />
           <!-- <img alt="" border="0" src="https://www.paypal.com/de_DE/i/scr/pixel.gif" width="1" height="1" /> -->
         </form>
@@ -40,15 +40,15 @@
                 </b-input-group-append>
             </b-form-group>
 
-            <b-form-group label="Koordinaten:" v-if="adressData.lon && adressData.lat">
+            <b-form-group label="Koordinaten:" v-if="addressData.lon && addressData.lat">
               <b-input-group>
-                <b-form-input readonly v-model="adressData.lat" />
-                <b-form-input readonly v-model="adressData.lon" />
+                <b-form-input readonly v-model="addressData.lat" />
+                <b-form-input readonly v-model="addressData.lon" />
               </b-input-group>
 
             </b-form-group>
-            <b-alert v-else-if="adressData == 'no_address'" variant="danger" show>
-              Die eingegebende Adresse konnte nicht gefunden werden. Bitte versuchen Sie es erneut.
+            <b-alert v-else-if="addressData == 'no_address'" variant="danger" show>
+              Die eingegebene Adresse konnte nicht gefunden werden. Bitte versuchen Sie es erneut.
             </b-alert>
             <b-form-group :disabled="this.useImportData" label="Jährlicher Stromverbrauch:">
               <b-input-group append="kWh">
@@ -93,7 +93,7 @@
               <b-form-group label="Neigung:">
                 <b-input-group append="° Grad">
                   <b-form-input v-model.number="roofInput.angle" type="number" min="0" max="90" required v-b-tooltip.hover
-                    title="0 = waargerecht, 90 = senkrecht" />
+                    title="0 = waagerecht, 90 = senkrecht" />
                 </b-input-group>
               </b-form-group>
               <b-form-group label="Installierte Leistung">
@@ -140,8 +140,8 @@
 
             <b-button-group class="mt-3">
               <b-button variant="primary" @click="generateData"
-                :disabled="(!adressData.lat && !adressData.lon) || input.roofs.length == 0"
-                :title="(!adressData.lat && !adressData.lon) || input.roofs.length == 0 ? 'Füge eine Adresse und mindestens eine PV Ausrichtung hinzu' : ''"
+                :disabled="(!addressData.lat && !addressData.lon) || input.roofs.length == 0"
+                :title="(!addressData.lat && !addressData.lon) || input.roofs.length == 0 ? 'Füge eine Adresse und mindestens eine PV Ausrichtung hinzu' : ''"
                 v-b-toggle.inputCollapse>
                 Berechnen
               </b-button>
@@ -162,7 +162,7 @@
             <b-form-group label="Vergleichsjahr:">
               <b-form-select v-model="input.year" :options="years"></b-form-select>
             </b-form-group>
-            <b-form-group label="Import individueller stündlicher Verbauch:">
+            <b-form-group label="Import individueller stündlicher Verbrauch:">
               <b-button size="sm" @click="downloadCsvTemplate">{{"Vorlage herunterladen für das o.g. Vergleichsjahr " + this.input.year}}</b-button>
               <b-form-file
               v-model="csvFile"
@@ -186,13 +186,13 @@
                 <b-form-input v-model.number="input.batterySocMinPercent" type="number" min="0" max="100" />
               </b-input-group>
             </b-form-group>
-            <b-form-group label="Ladeeffizenz Speicher (Laden / Entladen):">
+            <b-form-group label="Ladeeffizienz Speicher (Laden / Entladen):">
               <b-input-group append="%">
                 <b-form-input v-model.number="input.batteryLoadEfficiency" type="number" min="0" max="100" />
                 <b-form-input v-model.number="input.batteryUnloadEfficiency" type="number" min="0" max="100" />
               </b-input-group>
             </b-form-group>
-            <b-form-group label="Maximalleistung Wechelrichter (0 = keine Prüfung):">
+            <b-form-group label="Maximalleistung Wechselrichter (0 = keine Prüfung):">
               <b-input-group append="W">
                 <b-form-input v-model.number="input.maxPowerGenerationInverter" type="number" min="0" max="100000" />
               </b-input-group>
@@ -214,7 +214,7 @@
             </b-form-group>
             <!-- <b-form-group label="Lineare Degradation der PV-Module pro Jahr:">
               <b-input-group append="%">
-                <b-form-input v-model.number="input.linearDegrationModules" type="number" min="0" max="10" />
+                <b-form-input v-model.number="input.linearDegradationModules" type="number" min="0" max="10" />
               </b-input-group>
             </b-form-group>
             <b-form-group label="Lineare Veränderung des Strombedarfs pro Jahr (auch negativ erlaubt z.B. -1%):">
@@ -232,7 +232,6 @@
                 <b-form-input v-model.number="input.linearSelfUseRateChange" type="number" min="-10" max="10" />
               </b-input-group>
             </b-form-group> -->
-
           </b-collapse>
         </b-collapse>
       </b-col>
@@ -281,7 +280,7 @@
                   { key: 'gridUsedEnergy', label: 'Netzbezug', formatter: (val) => (val).toFixed(1) + ' kWh' },
                   { key: 'missedFeedInPowerGrid', label: 'Fehlende Netzeinspeisung', formatter: (val) => (val).toFixed(1) + ' kWh' },
                   { key: 'lossesPvGeneration', label: 'Verluste Wirkungsgrad Wechselrichter', formatter: (val) => (val).toFixed(1) + ' kWh' },
-                  { key: 'missedInverterPower', label: 'Verluste PV-Leistung > Wechelrichter Leistung', formatter: (val) => (val).toFixed(1) + ' kWh' },
+                  { key: 'missedInverterPower', label: 'Verluste PV-Leistung > Wechselrichter Leistung', formatter: (val) => (val).toFixed(1) + ' kWh' },
                   { key: 'missedBatteryPower', label: 'Verluste Speicher', formatter: (val) => (val).toFixed(1) + ' kWh' },
                 ]"
                 small
@@ -331,10 +330,10 @@ import FAQ from '../components/FAQ'
 // import axios from "axios";
 import {
   calculateConsumption,
+  energyFlow,
   generateDayTimeValues,
   mergePowerGeneration,
   normalizeHourlyRadiation,
-  energyFlow,
   regressionCalc
 } from "@/functions/energyFlow";
 import { factorFunction, PROFILEBASE, SLPH0 } from "@/functions/SLP";
@@ -396,7 +395,7 @@ export default {
         maxPowerLoadBattery: 0,
         maxPowerFeedIn: 0,
         amortizationYears: 20,
-        linearDegrationModules:0.5,
+        linearDegradationModules:0.5,
         linearConsumptionChange:0.5, // negative = less need
         linearConsumptionCostsChange:0,
         linearSelfUseRateChange:0,
@@ -416,7 +415,7 @@ export default {
       importCsvErrorMessage: null,
       roofsData: [],
       inputAddressSearchString: localStorage.getItem('storedInputAddressSearchString') || "",
-      adressData: JSON.parse(localStorage.getItem('storedAddress')) || {},
+      addressData: JSON.parse(localStorage.getItem('storedAddress')) || {},
       costSavingsWithoutBattery: 0,
       screenHeight: 0,
       years: [
@@ -442,7 +441,7 @@ export default {
         localStorage.setItem('storedInput', JSON.stringify(this.input))
         localStorage.setItem('storedInputAddressSearchString', this.inputAddressSearchString)
         localStorage.setItem('storedSizes', JSON.stringify(this.batterySizes))
-        localStorage.setItem('storedAddress', JSON.stringify(this.adressData))
+        localStorage.setItem('storedAddress', JSON.stringify(this.addressData))
       }
 
       this.inputBatterySizes = [...this.batterySizes]
@@ -450,9 +449,9 @@ export default {
       let now = performance.now()
 
       this.isCalculating = true
-      
+
       if (this.needFetch) {
-      
+
         this.roofsData = []
 
         const generationData = await Promise.all(this.input.roofs.map(roof => {
@@ -460,8 +459,8 @@ export default {
             url: this.buildQueryString({
               aspect: roof.aspect,
               angle: roof.angle,
-              lat: this.adressData.lat,
-              lon: this.adressData.lon,
+              lat: this.addressData.lat,
+              lon: this.addressData.lon,
               peakpower: roof.peakpower / 1000,
               loss: this.input.systemloss,
               startyear: this.input.year,
@@ -592,7 +591,7 @@ export default {
             const fedIn = generationYear - suPower
             return {
               year: val,
-              generationYear: generationYear * (100 - (this.input.linearDegrationModules * val)) /100,
+              generationYear: generationYear * (100 - (this.input.linearDegradationModules * val)) /100,
               consumptionYear: conYear,
               selfUsedEnergy: suPower,
               fedInPower: fedIn,
@@ -654,16 +653,16 @@ export default {
 
 
       if (osmReturn.length == 0) {
-        this.adressData = "no_address"
+        this.addressData = "no_address"
         console.log("Detected Wrong")
       } else if (osmReturn[0]) {
-        this.adressData = osmReturn[0]
-        this.inputAddressSearchString = this.adressData.display_name
+        this.addressData = osmReturn[0]
+        this.inputAddressSearchString = this.addressData.display_name
       }
     },
     buildQueryString(params) {
       //API BaseURL with Base Params
-      // let string = `https://re.jrc.ec.europa.eu/api/v5_2/SHScalc?outputformat=json&raddatabase=PVGIS-SARAH&cutoff=1`
+      // let queryString = `https://re.jrc.ec.europa.eu/api/v5_2/SHScalc?outputformat=json&raddatabase=PVGIS-SARAH&cutoff=1`
 
       const loss = params.loss || 12
       const lat = params.lat
@@ -674,9 +673,9 @@ export default {
       const angle = params.angle
       const aspect = params.aspect
 
-      let string = `https://re.jrc.ec.europa.eu/api/v5_2/seriescalc?pvcalculation=1&outputformat=json&loss=${loss}&lat=${lat}&lon=${lon}&startyear=${startyear}&endyear=${endyear}&peakpower=${peakpower}&angle=${angle}&aspect=${aspect}`
+      let queryString = `https://re.jrc.ec.europa.eu/api/v5_2/seriescalc?pvcalculation=1&outputformat=json&loss=${loss}&lat=${lat}&lon=${lon}&startyear=${startyear}&endyear=${endyear}&peakpower=${peakpower}&angle=${angle}&aspect=${aspect}`
 
-      return string
+      return queryString
     },
     resetValues() {
       localStorage.clear()
@@ -759,13 +758,13 @@ export default {
     },
     'input.systemloss'() {
       this.needFetch = true
-    }, 
+    },
     'input.year'() {
       this.needFetch = true
-    }, 
+    },
     'input.roofs'() {
       this.needFetch = true
-    }, 
+    },
     inputAddressSearchString(){
       this.needFetch = true
     },

@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div>
         <b-button v-b-toggle.collapseFaq>FAQs und News</b-button>
         <b-collapse id="collapseFaq">
             <b-card v-for="realm in getRealms()" v-bind:key="realm">
@@ -19,7 +19,7 @@
         </b-collapse>
     </div>
 </template>
-  
+
   <script>
   export default {
     name: 'FAQ',
@@ -34,19 +34,19 @@
             text:"Es ist nun möglich seinen eigenen Verbrauch in die Berechnung mit einfließen zu lassen. Wie das geht, könnt ihr unter den Reiter 'Erweiterete Einstellugen' in den FAQs sehen."},
             {realm:"Allgemeines",
             title:"Woher kommen die Daten",
-            text:"Die Berechnung basiert auf Daten von PVGis, einem kostenlosen Tool der Europäischen Kommision zur ermittlung von Strahlungsdaten. Dieses Tool stellt auch einige kostenlose Schnittstellen bereit die wir nutzen. Zusätzlich wurde für den Stromverbrauch das Standardlastprofil H0 des BDEW verwendet und auf den eingetragenen Jahresstromverbrauch errechnet"},
+            text:"Die Berechnung basiert auf Daten von PVGis, einem kostenlosen Tool der Europäischen Kommission zur Ermittlung von Strahlungsdaten. Dieses Tool stellt auch einige kostenlose Schnittstellen bereit die wir nutzen. Zusätzlich wurde für den Stromverbrauch das Standardlastprofil H0 des BDEW verwendet und auf den eingetragenen Jahresstromverbrauch errechnet"},
             {realm:"Allgemeines",
             title:"Wie funktioniert die Berechnung",
             text:"Anhand des eingetragenen Standortes werden bei PVGis die PV-Erzeugungsdaten je Stunde für ein Jahr abgeholt (Standard 2020) und mit den Verbrauchsdaten aus dem Lastprofil und verschiedene Batteriegrößen verrechnet."},
             {realm:"Allgemeines",
             title:"Mir fehlt eine Funktion",
-            text:"Wenn dir eine Funktion fehlt, dann melde dich über das <a href='https://www.akkudoktor.net/forum'>Forum von Andreas Schmitz</a> oder direkt auf der <a href='https://github.com/nick81nrw/PVTools/issues'>Quellcode Website</a>. Gerne nehmen wir dafür auch eine Untersützung entgegen ;-)"},
+            text:"Wenn dir eine Funktion fehlt, dann melde dich über das <a href='https://www.akkudoktor.net/forum'>Forum von Andreas Schmitz</a> oder direkt auf der <a href='https://github.com/nick81nrw/PVTools/issues'>Quellcode Website</a>. Gerne nehmen wir dafür auch eine Unterstützung entgegen ;-)"},
             {realm:"Eingabefelder",
             title:"Adresse",
-            text:"(Pflichtfeld) Hier kannst du eine Stadt, einer Postleitzahl oder eine Komplette Adresse eingeben. Der erste Treffer laut openstreetmap wird dann verwendet. Falls die Adresse nicht stimmen sollte, einfach mehr Informationen eingeben. Daraus wird der Breiten- und Längengrad ermittelt welche für die Berechnung benötigt wird."},
+            text:"(Pflichtfeld) Hier kannst du eine Stadt, einer Postleitzahl oder eine Komplette Adresse eingeben. Der erste Treffer laut OpenStreetMap wird dann verwendet. Falls die Adresse nicht stimmen sollte, einfach mehr Informationen eingeben. Daraus wird der Breiten- und Längengrad ermittelt welche für die Berechnung benötigt wird."},
             {realm:"Eingabefelder",
             title:"Stromverbrauch, Stromkosten und Einspeisevergütung",
-            text:"Um eine einfache Berechnung der Amortisation machen zu können, werdend iese Werte benötigt. Wenn du keine Einspeisevergütung bekommst, kannst du diese auf 0€ setzen."},
+            text:"Um eine einfache Berechnung der Amortisation machen zu können, werden diese Werte benötigt. Wenn du keine Einspeisevergütung bekommst, kannst du diese auf 0€ setzen."},
             {realm:"Eingabefelder",
             title:"Ausrichtung, Neigung und installierte Leistung",
             text:"(Pflichtfeld) Hier musst du mindestens eine Ausrichtung/Dach eintragen und auf [Ausrichtung zur Berechnung hinzufügen] klicken. Die Ausrichtung wird in den PV-Anlagen typischen Azimuth angegeben. Dabei is -180 und 180° Norden, -90° Azimuth genau Osten, 0° Süden und 90° Westen."},
@@ -55,16 +55,16 @@
             text:"Nachdem ihr mindestens eine Ausrichtung eingetragen habt, könnt ihr diese mit dem Mülleimer wieder entfernen oder mit dem Stift bearbeiten."},
             {realm:"Eingabefelder",
             title:"Berechnen/Zurücksetzen/Erweiterte Einstellungen",
-            text:"Mit Berechnen wird die Berechnung ausgeführt. Der Button ist inaktiv, wenn du die Pflichfelder nicht gefüllt hast. Mit Zurücksetzen werden deine eingegebenen und damit gespeicherten Daten gelöscht. Unter Erweiterte Einstellungen findest du vorbelegte Parameter, die du anpassen kannst"},
+            text:"Mit Berechnen wird die Berechnung ausgeführt. Der Button ist inaktiv, wenn du die Pflichtfelder nicht gefüllt hast. Mit Zurücksetzen werden deine eingegebenen und damit gespeicherten Daten gelöscht. Unter Erweiterte Einstellungen findest du vorbelegte Parameter, die du anpassen kannst"},
             {realm:"Erweitert",
             title:"Vergleichsjahr",
-            text:"Für die PV Erzegung stehen bei PVGis mehrere Jahre zur Verfügung. 2020 ist das aktuellste Jahr. In dem Rechner wird immer nur ein Jahr berechnet, wenn man genauer rechnen möchte, solltest du die Ergebnisse von mehreren Jahren vergleichen."},
+            text:"Für die PV Erzregung stehen bei PVGis mehrere Jahre zur Verfügung. 2020 ist das aktuellste Jahr. In dem Rechner wird immer nur ein Jahr berechnet, wenn man genauer rechnen möchte, solltest du die Ergebnisse von mehreren Jahren vergleichen."},
             {realm:"Erweitert",
             title:"Systemverluste",
             text:"Diese Verluste werden von PVGis pauschal bei der Ertragsberechnung berücksichtigt."},
             {realm:"Erweitert",
             title:"Ladeeffizienz",
-            text:"Bei der Be- und Entladung wird eine nicht 100%ige Effizienz angenommen. Wenn du also 1kWh in den Speicher laden möchstest, benötigst du dafür 1kWh/99% Energie."},
+            text:"Bei der Be- und Entladung wird eine nicht 100%ige Effizienz angenommen. Wenn du also 1kWh in den Speicher laden möchtest, benötigst du dafür 1kWh/99% Energie."},
             {realm:"Erweitert",
             title:"Maximalleistung Wechselrichter/Speicher",
             text:"Wenn du mehr PV Leistung hast als der Wechselrichter nutzen kann, kannst du damit die max. Leistung festlegen. Die Ergebnisse werden in den Details angezeigt. Das gilt bei dem Speicher genau so. NEU 11/23: Dieser Wert wird genutzt um einen Wirkungsgrad zu ermitteln, deshalb ist dieser Wert auf Standard 5000W gesetzt. "},
@@ -79,7 +79,7 @@
             text:"Ihr könnt euch unter 'Erweiterete Einstellungen' eine csv-Vorlage herunterladen und eure stündlichen Verbräuche in Wattstunden in Spalte B einpflegen. Die Spalte A muss so bleiben. Außerdem könnt ihr auswählen, gegen welches Jahr ihr euren Verbrauch berechnen wollt, Standard ist 2020. Wenn ihr keine Daten von dem Jahr habt, ist das nicht schlimm. Das Jahr betrifft nur die Sonneneinstrahlung. Ihr könnt also auch eure Verbrauchsdaten von z.B. 2022 eingeben und gegen das Jahr 2020 rechnen lassen."},
             {realm:"Fehlerbehebung",
             title:"Irgendwas stimmt nicht",
-            text:"Nutze den Zurücksetzen knopf. dann wird alles zurückgesetzt und die meisten Fehler sollten sich erledigen."},
+            text:"Nutze den 'Zurücksetzen' Knopf. dann wird alles zurückgesetzt und die meisten Fehler sollten sich erledigen."},
         ]
       }
     },

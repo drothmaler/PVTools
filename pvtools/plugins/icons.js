@@ -11,7 +11,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(
-    faTrash,  
+    faTrash,
     faPen,
     faSquareCaretUp,
     faSquareCaretDown,

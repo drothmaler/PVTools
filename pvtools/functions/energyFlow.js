@@ -1,35 +1,35 @@
 /**
  * @return {Object) Functions: energyFlow, calculateConsumption, normalizeHourlyRadiation
- * 
+ *
  */
 
 
 /**
- * Calculate consumption per hour from a load profile, year and an yearly consumption
+ * Calculate consumption per hour from a load profile, year and a yearly consumption
  * @param  {Int} powerGeneration             watts for one hour
  * @return {Object}                         {newBatterySoc: 3560, ...}
- 
+
 Parameters object:
     powerGeneration: 503 (watts for one hour)
     energyConsumption: 433 (watts for one hour)
-    batterySoC: 3450 (watthours)
-    batterySocMax: 5500 (watthours)
-    batterySocMin: 100 (watthours)
+    batterySoC: 3450 (watt-hours)
+    batterySocMax: 5500 (watt-hours)
+    batterySocMin: 100 (watt-hours)
     batteryEfficiency / batteryLoadEfficiency: 0.99 (99%)
-    batteryUnloadEfficiency (optinal): 0.99 (99%)
+    batteryUnloadEfficiency (optional): 0.99 (99%)
     maxPowerGenerationInverter (optional): 2500 (watts)
     maxPowerGenerationBattery: (optional): 3400 (watts)
     maxPowerLoadBattery (optional): 2300 (watts)
     maxPowerFeedIn (optional): 8500 (watts) for feedIn regulations (70% rule in germany)
     dayTime (optional): to identify this time
 Return object:
-    newBatterySoc: 3560 (watthours)
-    selfUsagePowerPv: 3550 (watthours) PV-power, that used for own consumption
-    selfUsagePowerBattery: 2250 (watthours) Battry-power, that used for own consumption
-    selfUsagePower: 5520 (watthours) sum Pv + Battery
-    feedInPowerGrid: 3445 (watthours) 
-    batteryLoad: 2520 / -2520 (watthours) load/unload battery
-    consumptionGrid: 2450 (watthours) 
+    newBatterySoc: 3560 (watt-hours)
+    selfUsagePowerPv: 3550 (watt-hours) PV-power, that used for own consumption
+    selfUsagePowerBattery: 2250 (watt-hours) Battery-power, that used for own consumption
+    selfUsagePower: 5520 (watt-hours) sum Pv + Battery
+    feedInPowerGrid: 3445 (watt-hours)
+    batteryLoad: 2520 / -2520 (watt-hours) load/unload battery
+    consumptionGrid: 2450 (watt-hours)
     dayTime (optional): to identify this time
 
     missedFeedInPowerGrid, missedInverterPower, missedBatteryPower;
@@ -38,7 +38,7 @@ Return object:
 missing calculations parameters:
 
 missing return values:
-    missed feedin power wehen maxPowerFeedIn is set
+    missed feed-in power wehen maxPowerFeedIn is set
     missed PV power, when maxPowerGenerationInverter is set
     missed battery power, when maxPowerLoadBattery or maxPowerGenerationBattery is set
 */
@@ -46,13 +46,13 @@ missing return values:
 
 
 const energyFlow = ( {
-		energyGeneration, 
-        energyConsumption, 
-        batterySoc, 
-        batterySocMax, 
-        batterySocMin, 
-        batteryEfficiency, 
-        batteryLoadEfficiency, 
+		energyGeneration,
+        energyConsumption,
+        batterySoc,
+        batterySocMax,
+        batterySocMin,
+        batteryEfficiency,
+        batteryLoadEfficiency,
         batteryUnloadEfficiency,
         maxPowerGenerationInverter,
         maxPowerGenerationBattery,
@@ -60,24 +60,22 @@ const energyFlow = ( {
         dayTime,
 		regressionDb
     } ) => {
-    
-    let 
-		missedInverterPower = 0, 
+
+    let
+		missedInverterPower = 0,
 		missedBatteryPower = 0
-    
+
     const powerProduction = energyGeneration
 
     batteryLoadEfficiency = batteryLoadEfficiency || batteryEfficiency || 1
     batteryUnloadEfficiency = batteryUnloadEfficiency || batteryEfficiency || 1
 
 	if (maxPowerGenerationInverter && maxPowerGenerationInverter < energyGeneration) {
-		
 	    missedInverterPower = energyGeneration - maxPowerGenerationInverter
 	    energyGeneration = maxPowerGenerationInverter
 	}
 
-
-	let {		
+	let {
         selfUsedEnergy,
         selfUsedEnergyPV,
 		gridUsedEnergy,
@@ -90,9 +88,9 @@ const energyFlow = ( {
         newBatterySoc,
         missedFeedInPowerGrid,
                 } = regressionCalc({
-                        regressionDb, 
-                        energyConsumption, 
-                        staticPowerGeneration: energyGeneration, 
+                        regressionDb,
+                        energyConsumption,
+                        staticPowerGeneration: energyGeneration,
                         maxPowerStaticInverter: maxPowerGenerationInverter,
                         maxPowerDynamicInverter: maxPowerGenerationBattery,
                         batterySoc,
@@ -242,8 +240,8 @@ const energyFlow = ( {
 }
 
 /**
- * Calculate consumption per hour from a load profile, year and an yearly consumption
- * @param  {Object} loadProfile             Loadprofile Object {name: "SLPH0", values: [{ month: 1, weekDay: 1, dayHour: 0, partPerMonth: 0.004096433, partPerYear: 0.000406886 },...]}
+ * Calculate consumption per hour from a load profile, year and a yearly consumption
+ * @param  {Object} loadProfile             Load profile Object {name: "SLPH0", values: [{ month: 1, weekDay: 1, dayHour: 0, partPerMonth: 0.004096433, partPerYear: 0.000406886 },...]}
  * @param  {Int}   year                     The year which should be calculated (leap year in mind)
  * @param  {Int}   consumptionKwhPerYear    Consumption in this year in kWh
  * @return {Object}                         {"20200101:00":{P:20}, "20200101:01":{P:30.5}, ...}
@@ -255,22 +253,22 @@ const calculateConsumption = ({year, consumptionYear, profile, profileBase = 100
     const consumptionFactor = consumptionYear / profileBase
     let currentDay = new Date(Date.UTC(year,    0, 1,0,0))
     const lastDay = new Date(Date.UTC(year + 1, 0, 1,0,0))
-    
+
     const days = {}
     // Needed for factorFunction "Standardlastprofil BDEW"
     let dayTimer = 1
 
     while (currentDay <= lastDay) {
-        
-        
+
+
         let currentProfile = profile
         .find(season => new Date(season.till + "/" + year ) >= currentDay) // TODO/BUG: this finds the next season one day earlier (03/21 is falsy at currentDay 03/21)
 
         if (!currentProfile) {                  //TODO/BUG: The date "till: 12/31" aren't find correctly.
             currentProfile = profile
             .find(season => season.last)
-    
-        } 
+
+        }
 
         for (let hour = 0; hour < 24; hour++) {
 
@@ -278,38 +276,38 @@ const calculateConsumption = ({year, consumptionYear, profile, profileBase = 100
             let consumption
             switch (currentDay.getDay()) {      // find the right day for profile | 0 = sun, 1 = mon, ..., 6 = sat
                 case 0:
-                    consumption = currentProfile.profileDays['sun'][hour] || currentProfile.profileDays['default'][hour] 
+                    consumption = currentProfile.profileDays['sun'][hour] || currentProfile.profileDays['default'][hour]
                     break;
                 case 6:
-                    consumption = currentProfile.profileDays['sat'][hour] || currentProfile.profileDays['default'][hour] 
+                    consumption = currentProfile.profileDays['sat'][hour] || currentProfile.profileDays['default'][hour]
                     break;
-                    
+
                 default:
-                    consumption = currentProfile.profileDays['weekdays'][hour] || currentProfile.profileDays['default'][hour] 
+                    consumption = currentProfile.profileDays['weekdays'][hour] || currentProfile.profileDays['default'][hour]
                     break;
             }
-            
+
             if (factorFunction){                // if function set, use function for "Standardlastprofil BDEW"
 
-                days[timeString] = {P:factorFunction(dayTimer, consumption * consumptionFactor)} 
+                days[timeString] = {P:factorFunction(dayTimer, consumption * consumptionFactor)}
             }
             else {
-                
+
                 days[timeString] = {P:consumption * consumptionFactor}
             }
-            
+
         }
         currentDay.setDate(currentDay.getDate() + 1)    // set one day after
         dayTimer++
 
-    } 
+    }
     return days
 }
 
 /**
- * normalize the hourly radiation from pvgis API
+ * normalize the hourly radiation from PVGIS API
  * @param  {Array[Array]} hourlyRadiationArrays An Array with power generation e.g. two: [ [{ "time": "20200101:0010", "P": 20.0, ... },{ "time": "20200101:0110", "P": 20.0, ... }],[...] ]
- * @return {Array[Object]} Array with Objects in Fomrat [ [{"20200101:00":{P:20}, "20200101:01":{P:30.5}, ...}], [{...}, ...] ]
+ * @return {Array[Object]} Array with Objects in format [ [{"20200101:00":{P:20}, "20200101:01":{P:30.5}, ...}], [{...}, ...] ]
 */
 
 const normalizeHourlyRadiation = hourlyRadiationArray => {
@@ -330,9 +328,9 @@ const normalizeHourlyRadiation = hourlyRadiationArray => {
 
 
 /**
- * merge powerGeneration to one summerized object
+ * merge powerGeneration to one summarized object
  * @param  {Array[Object]} powerGenerationArray An Array with power generation e.g. two: [ {"20200101:00":{P:20}, "20200101:01":{P:30.5}, ...}, {...} ]
- * @return {Object} Array with Objects in Fomrat {"20200101:00":{P:20}, "20200101:01":{P:30.5}, ...}
+ * @return {Object} Array with Objects in format {"20200101:00":{P:20}, "20200101:01":{P:30.5}, ...}
 */
 
 const mergePowerGeneration = powerGenerationArray => {
@@ -369,26 +367,26 @@ const generateDayTimeOrder = year => {
     const timeString = []
 
     months.map((month, i) => {
-        
+
         const mLength = monthLength[i]
         Array.from(Array(mLength).keys()).map(day => {
             day += 1
             Array.from(Array(24).keys()).map(hour => {
                 timeString.push(`${year}${('00' + (month)).slice(-2)}${('00' + day).slice(-2)}:${('00' + hour).slice(-2)}`)
-                
+
             })
-            
+
 
         })
-        
-        
+
+
 
     })
     return timeString
 }
 
 /**
- * generate array with merged power generation + calculated power consumption within day time aray
+ * generate array with merged power generation + calculated power consumption within day time array
  * @param  {Int} year A year: 2020
  * @return {Array} Array with Objects  [{dayTime: "20200101:00", P: 220, consumption: 350, temperature:10.3},{dayTime: "20200101:01", P: 20, consumption: 450}, ... ]
 */
@@ -396,7 +394,7 @@ const generateDayTimeOrder = year => {
 const generateDayTimeValues = ({consumption, powerGeneration, year}) => {
     return generateDayTimeOrder(year).reduce((prev, curr) => {
         if (powerGeneration[curr] && consumption[curr]){
-            return [...prev, 
+            return [...prev,
                 {
                     dayTime: curr,
                     P: powerGeneration[curr].P,
@@ -409,7 +407,7 @@ const generateDayTimeValues = ({consumption, powerGeneration, year}) => {
             return prev
         }
     },[])
-    
+
 }
 
 
