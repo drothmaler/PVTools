@@ -103,20 +103,72 @@ describe('PV > Consumption',() => {
                     maxPowerGenerationInverter: 4500
                 })
         expect(data).toEqual({
-            newBatterySoc: 500 * .99 + 5000,
+            newBatterySoc: 1000 * .99 + 5000,
             selfUsagePower: 4000,
             selfUsagePowerPv: 4000,
             selfUsagePowerBattery: 0,
             feedInPowerGrid: 0,
-            batteryLoad: 500 * .99,
+            batteryLoad: 1000 * .99,
             consumptionGrid: 0,
-            missedInverterPower: 500,
+            dayTime: "",
+            missedInverterPower: 0,
             missedBatteryPower: 0,
             missedFeedInPowerGrid: 0,
             dayTime:""
         })
     })
-    
+
+    test('pv generation is more than inverter max power generation', () => {
+        const data = energyFlow({
+                    powerGeneration: 3000,
+                    powerConsumption: 4000,
+                    batterySoc: 5000,
+                    batterySocMax: 10000,
+                    batterySocMin: 100,
+                    batteryEfficiency: .99,
+                    maxPowerGenerationInverter: 2500
+                })
+        expect(data).toEqual({
+            newBatterySoc: 500 * .99 + 5000,
+            selfUsagePower: 2500,
+            selfUsagePowerPv: 2500,
+            selfUsagePowerBattery: 0,
+            feedInPowerGrid: 0,
+            batteryLoad: 500 * .99,
+            consumptionGrid: 1500,
+            dayTime: "",
+            missedInverterPower: 1500,
+            missedBatteryPower: 0,
+            missedFeedInPowerGrid: 0,
+        })
+    })
+
+    test('pv generation is more than inverter max power generation', () => {
+        const data = energyFlow({
+                    powerGeneration: 3000,
+                    powerConsumption: 4000,
+                    batterySoc: 10000,
+                    batterySocMax: 10000,
+                    batterySocMin: 100,
+                    batteryEfficiency: .99,
+                    maxPowerGenerationInverter: 2500
+                })
+        expect(data).toEqual({
+            newBatterySoc: 10000,
+            selfUsagePower: 2500,
+            selfUsagePowerPv: 2500,
+            selfUsagePowerBattery: 0,
+            feedInPowerGrid: 0,
+            batteryLoad: 0,
+            consumptionGrid: 1500,
+            dayTime: "",
+            missedInverterPower: 1500,
+            missedBatteryPower: 500,
+            missedFeedInPowerGrid: 0,
+        })
+    })
+
+
     test('pv generation is more than consumption, battery load efficiency diff than unload', () => {
         const data = energyFlow({   
                     powerGeneration: 5000, 

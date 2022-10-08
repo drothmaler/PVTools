@@ -1,6 +1,6 @@
 /**
  * @return {Object) Functions: energyFlow, calculateConsumption, normalizeHourlyRadiation
- * 
+ *
  */
 
 
@@ -8,7 +8,7 @@
  * Calculate consumption per hour from a load profile, year and an yearly consumption
  * @param  {Int} powerGeneration             watts for one hour
  * @return {Object}                         {newBatterySoc: 3560, ...}
- 
+
 Parameters object:
     powerGeneration: 503 (watts for one hour)
     powerConsumption: 433 (watts for one hour)
@@ -27,9 +27,9 @@ Return object:
     selfUsagePowerPv: 3550 (watthours) PV-power, that used for own consumption
     selfUsagePowerBattery: 2250 (watthours) Battry-power, that used for own consumption
     selfUsagePower: 5520 (watthours) sum Pv + Battery
-    feedInPowerGrid: 3445 (watthours) 
+    feedInPowerGrid: 3445 (watthours)
     batteryLoad: 2520 / -2520 (watthours) load/unload battery
-    consumptionGrid: 2450 (watthours) 
+    consumptionGrid: 2450 (watthours)
     dayTime (optional): to identify this time
 
     missedFeedInPowerGrid, missedInverterPower, missedBatteryPower;
@@ -46,13 +46,13 @@ missing return values:
 
 
 const energyFlow = ( {
-        powerGeneration, 
-        powerConsumption, 
-        batterySoc, 
-        batterySocMax, 
-        batterySocMin, 
-        batteryEfficiency, 
-        batteryLoadEfficiency, 
+        powerGeneration,
+        powerConsumption,
+        batterySoc,
+        batterySocMax,
+        batterySocMin,
+        batteryEfficiency,
+        batteryLoadEfficiency,
         batteryUnloadEfficiency,
         maxPowerGenerationInverter,
         maxPowerGenerationBattery,
@@ -60,11 +60,11 @@ const energyFlow = ( {
         maxPowerFeedIn,
         dayTime
     } ) => {
-    
-    let selfUsagePowerPv, selfUsagePowerBattery, selfUsagePower, 
+
+    let selfUsagePowerPv, selfUsagePowerBattery, selfUsagePower,
         newBatterySoc, feedInPowerGrid, consumptionGrid, batteryLoad,
         missedFeedInPowerGrid, missedInverterPower, missedBatteryPower;
-    
+
     missedFeedInPowerGrid = 0
     missedInverterPower = 0
     missedBatteryPower = 0
@@ -72,20 +72,18 @@ const energyFlow = ( {
     batteryLoadEfficiency = batteryLoadEfficiency || batteryEfficiency || 1
     batteryUnloadEfficiency = batteryUnloadEfficiency || batteryEfficiency || 1
 
-
-    if (maxPowerGenerationInverter && maxPowerGenerationInverter < powerGeneration) {
-        
-        missedInverterPower = powerGeneration - maxPowerGenerationInverter
-        powerGeneration = maxPowerGenerationInverter
+    if (maxPowerGenerationInverter && maxPowerGenerationInverter < powerConsumption) {
+        missedInverterPower = powerConsumption - maxPowerGenerationInverter
+        powerConsumption = maxPowerGenerationInverter
     }
-    
+
     if (powerGeneration > powerConsumption) {
         // if power generaton is more then consumption, self used power is used complete and battery SoC will be calculated
         selfUsagePowerPv = powerConsumption
         selfUsagePowerBattery = 0
         const excessPower = powerGeneration - powerConsumption
         consumptionGrid = 0
-        
+
         if (batterySoc >= batterySocMax) {
             // if battery is full, all power will be feed in
             feedInPowerGrid = excessPower
@@ -107,8 +105,14 @@ const energyFlow = ( {
             }
             newBatterySoc = batterySoc + batteryLoad
         }
-        
-        
+
+        let inverterPower = powerConsumption + feedInPowerGrid
+        if (maxPowerGenerationInverter && maxPowerGenerationInverter < inverterPower) {
+            // trim the possible feed in, if it is limited by the inverter
+            // if the battery had been bigger, we could have stored it - so it is missed battery, not missed feed-in
+            missedBatteryPower = inverterPower - maxPowerGenerationInverter
+            feedInPowerGrid -= missedBatteryPower
+        }
     }
     else if (powerGeneration < powerConsumption) {
         // if power generaton is less then consumption, self used power is only the genaration and battery Soc will be calculated
@@ -124,8 +128,8 @@ const energyFlow = ( {
             selfUsagePowerBattery = 0
 
         } else if (batterySoc - ((excessLoad) / batteryUnloadEfficiency) < batterySocMin) {
-            // if battery will be empty, grid consumption and battery will be splitted 
-            
+            // if battery will be empty, grid consumption and battery will be splitted
+
             consumptionGrid = (excessLoad - batterySoc + batterySocMin) / batteryUnloadEfficiency
             newBatterySoc = batterySocMin
             batteryLoad = batterySocMin - batterySoc
@@ -136,8 +140,8 @@ const energyFlow = ( {
                 selfUsagePowerBattery = maxPowerGenerationBattery
                 newBatterySoc = batterySoc + batteryLoad
             }
-            
-            
+
+
             // battrySoc load  batterymin
             //    200     500     100
             // 400 consumption (load(/batteryUnloadEfficiency) - batterySoc + batterySocMin )
@@ -165,7 +169,9 @@ const energyFlow = ( {
 
     }
 
-    // 
+    consumptionGrid += missedInverterPower
+
+    //
     selfUsagePower = selfUsagePowerPv + selfUsagePowerBattery
     if (maxPowerFeedIn < feedInPowerGrid) {
         missedFeedInPowerGrid = feedInPowerGrid - maxPowerFeedIn
@@ -206,22 +212,22 @@ const calculateConsumption = ({year, consumptionYear, profile, profileBase = 100
     const consumptionFactor = consumptionYear / profileBase
     let currentDay = new Date(Date.UTC(year,    0, 1,0,0))
     const lastDay = new Date(Date.UTC(year + 1, 0, 1,0,0))
-    
+
     const days = {}
     // Needed for factorFunction "Standardlastprofil BDEW"
     let dayTimer = 1
 
     while (currentDay <= lastDay) {
-        
-        
+
+
         let currentProfile = profile
         .find(season => new Date(season.till + "/" + year ) >= currentDay) // TODO/BUG: this finds the next season one day earlier (03/21 is falsy at currentDay 03/21)
 
         if (!currentProfile) {                  //TODO/BUG: The date "till: 12/31" aren't find correctly.
             currentProfile = profile
             .find(season => season.last)
-    
-        } 
+
+        }
 
         for (let hour = 0; hour < 24; hour++) {
 
@@ -229,31 +235,31 @@ const calculateConsumption = ({year, consumptionYear, profile, profileBase = 100
             let consumption
             switch (currentDay.getDay()) {      // find the right day for profile | 0 = sun, 1 = mon, ..., 6 = sat
                 case 0:
-                    consumption = currentProfile.profileDays['sun'][hour] || currentProfile.profileDays['default'][hour] 
+                    consumption = currentProfile.profileDays['sun'][hour] || currentProfile.profileDays['default'][hour]
                     break;
                 case 6:
-                    consumption = currentProfile.profileDays['sat'][hour] || currentProfile.profileDays['default'][hour] 
+                    consumption = currentProfile.profileDays['sat'][hour] || currentProfile.profileDays['default'][hour]
                     break;
-                    
+
                 default:
-                    consumption = currentProfile.profileDays['weekdays'][hour] || currentProfile.profileDays['default'][hour] 
+                    consumption = currentProfile.profileDays['weekdays'][hour] || currentProfile.profileDays['default'][hour]
                     break;
             }
-            
+
             if (factorFunction){                // if function set, use function for "Standardlastprofil BDEW"
 
-                days[timeString] = {P:factorFunction(dayTimer, consumption * consumptionFactor)} 
+                days[timeString] = {P:factorFunction(dayTimer, consumption * consumptionFactor)}
             }
             else {
-                
+
                 days[timeString] = {P:consumption * consumptionFactor}
             }
-            
+
         }
         currentDay.setDate(currentDay.getDate() + 1)    // set one day after
         dayTimer++
 
-    } 
+    }
     return days
 }
 
@@ -320,19 +326,19 @@ const generateDayTimeOrder = year => {
     const timeString = []
 
     months.map((month, i) => {
-        
+
         const mLength = monthLength[i]
         Array.from(Array(mLength).keys()).map(day => {
             day += 1
             Array.from(Array(24).keys()).map(hour => {
                 timeString.push(`${year}${('00' + (month)).slice(-2)}${('00' + day).slice(-2)}:${('00' + hour).slice(-2)}`)
-                
+
             })
-            
+
 
         })
-        
-        
+
+
 
     })
     return timeString
@@ -347,7 +353,7 @@ const generateDayTimeOrder = year => {
 const generateDayTimeValues = ({consumption, powerGeneration, year}) => {
     return generateDayTimeOrder(year).reduce((prev, curr) => {
         if (powerGeneration[curr] && consumption[curr]){
-            return [...prev, 
+            return [...prev,
                 {
                     dayTime: curr,
                     P: powerGeneration[curr].P,
@@ -360,7 +366,7 @@ const generateDayTimeValues = ({consumption, powerGeneration, year}) => {
             return prev
         }
     },[])
-    
+
 }
 
 module.exports = {
