@@ -5,7 +5,8 @@
         <h1>PVTools</h1>
       </b-col>
       <b-col>
-        <iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0" width="200" height="100"
+        <iframe scrolling="no"  width="200" height="100"
+          style="border: 0; margin: 0"
           type="text/html"
           src="https://www.youtube.com/embed/FKSDynkXchY?autoplay=0&fs=1&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0"></iframe>
       </b-col>
@@ -47,7 +48,7 @@
               </b-input-group>
 
             </b-form-group>
-            <b-alert v-else-if="adressData == 'no_address'" variant="danger" show>
+            <b-alert v-else-if="adressData === 'no_address'" variant="danger" show>
               Die eingegebende Adresse konnte nicht gefunden werden. Bitte versuchen Sie es erneut.
             </b-alert>
             <b-form-group label="Jährlicher Stromverbrauch:">
@@ -217,7 +218,6 @@
                 <b-form-input v-model.number="input.linearSelfUseRateChange" type="number" min="-10" max="10" />
               </b-input-group>
             </b-form-group> -->
-
           </b-collapse>
         </b-collapse>
       </b-col>
@@ -233,7 +233,6 @@
                 { data: displayData.map(item => item.amortization), yAxisID: 'y2', label: 'Amortization', borderColor: 'red', }
                 ]" />
           </div>
-
 
         </b-col>
       </b-row>
@@ -498,10 +497,10 @@ export default {
         const selfSufficiencyRate = selfUsedPower / this.input.yearlyConsumption * 100 // Autarkiegrad
         const selfUseRate = selfUsedPower / generationYear * 100 // Eigenverbrauchsquote
         const costSavings = (selfUsedPower * this.input.consumptionCosts + fedInPower * this.input.feedInCompensation)
-        if (size == 1) costSavingWithoutBattery = costSavings;
+        if (size === 1) costSavingWithoutBattery = costSavings;
         const amortization = (this.input.installationCostsWithoutBattery + this.input.batteryCostsPerKwh * (size / 1000)) / costSavings
-        const costSavingsBattery = size == 1 ? 0 : costSavings - costSavingWithoutBattery
-        const batteryAmortization = size == 1 ? 0 : this.input.batteryCostsPerKwh * (size / 1000) / costSavingsBattery
+        const costSavingsBattery = size === 1 ? 0 : costSavings - costSavingWithoutBattery
+        const batteryAmortization = size === 1 ? 0 : this.input.batteryCostsPerKwh * (size / 1000) / costSavingsBattery
 
         const monthlyDataObj = energyFlowData.reduce((prev, curr) => {
           const month = parseInt(curr.dayTime.slice(4, 6))
@@ -599,7 +598,7 @@ export default {
       })).data
 
 
-      if (osmReturn.length == 0) {
+      if (osmReturn.length === 0) {
         this.adressData = "no_address"
         console.log("Detected Wrong")
       } else if (osmReturn[0]) {
