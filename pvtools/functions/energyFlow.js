@@ -73,10 +73,10 @@ const energyFlow = ( {
     batteryUnloadEfficiency = batteryUnloadEfficiency || batteryEfficiency || 1
 
 
-    if (maxPowerGenerationInverter && maxPowerGenerationInverter < powerGeneration) {
-        
-        missedInverterPower = powerGeneration - maxPowerGenerationInverter
-        powerGeneration = maxPowerGenerationInverter
+    if (maxPowerGenerationInverter && maxPowerGenerationInverter < powerConsumption) {
+
+      missedInverterPower = powerConsumption - maxPowerGenerationInverter
+        powerConsumption = maxPowerGenerationInverter
     }
     
     if (powerGeneration > powerConsumption) {
@@ -107,8 +107,14 @@ const energyFlow = ( {
             }
             newBatterySoc = batterySoc + batteryLoad
         }
-        
-        
+
+        let inverterPower = powerConsumption + feedInPowerGrid
+        if (maxPowerGenerationInverter && maxPowerGenerationInverter < inverterPower) {
+            // trim the possible feed in, if it is limited by the inverter
+            // if the battery had been bigger, we could have stored it - so it is missed battery, not missed feed-in
+            missedBatteryPower = inverterPower - maxPowerGenerationInverter
+            feedInPowerGrid -= missedBatteryPower
+        }
     }
     else if (powerGeneration < powerConsumption) {
         // if power generaton is less then consumption, self used power is only the genaration and battery Soc will be calculated
@@ -165,7 +171,9 @@ const energyFlow = ( {
 
     }
 
-    // 
+    consumptionGrid += missedInverterPower
+
+    //
     selfUsagePower = selfUsagePowerPv + selfUsagePowerBattery
     if (maxPowerFeedIn < feedInPowerGrid) {
         missedFeedInPowerGrid = feedInPowerGrid - maxPowerFeedIn
