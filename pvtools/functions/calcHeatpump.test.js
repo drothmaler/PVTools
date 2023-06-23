@@ -3,7 +3,7 @@ const {calcHeatingTempMap, calcHeatEfficiencyMap} = require('./calcHeatpump')
 
 describe('calculate heating temperature',() => {
     test('test failure input parameters', () => {
-        expect(() => calcHeatingTempMap({tempMap:1})).toThrow('maxHeatTemp not given')
+        expect(() => calcHeatingTempMap({tempMap:[]})).toThrow('maxHeatTemp not given')
         expect(() => calcHeatingTempMap({maxHeatTemp: 15})).toThrow('tempMap is not given')
         expect(() => calcHeatingTempMap({maxHeatTemp: 15, tempMap:'text'})).toThrow('tempMap is not an array')
         expect(() => calcHeatingTempMap({maxHeatTemp: 15, tempMap:[]})).toThrow('tempMap length must be greater then 0')
@@ -32,7 +32,7 @@ describe('calculate efficiency Map',() => {
     test('test efficiency calculations', () => {
         const calc = calcHeatEfficiencyMap({minHeatTemp: -10, maxHeatTemp: 10, minTargetTemp:39, maxTargetTemp:40, efficiencyMap:[[2,35,4.61], [-7,55,2.13], [-7,35,3.14]] } )
         // const calc = calcHeatEfficiencyMap({minHeatTemp: -10, maxHeatTemp: 10, minTargetTemp:39, maxTargetTemp:40, efficiencyMap:[[-7,35,3.14], [-7,55,2.13], [2,35,4.61]] } )
-        
+
         expect(calc['39']['-2']).toBe(3.6418333333333335)
     })
 })
@@ -40,6 +40,6 @@ describe('calculate efficiency Map',() => {
 describe('calculate needed heat per day', () => {
     test('', () => {
 
-        
+
     })
 })

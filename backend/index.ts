@@ -1,4 +1,5 @@
 import path from "path";
+import cors from "cors"
 import express from "express"
 import * as bodyParser from "body-parser"
 import {relayAPIRequest} from "./api/relay";
@@ -9,7 +10,6 @@ import {relayAPIRequest} from "./api/relay";
  * Setup some things so the frontend can communicate with the backend
  */
 const app = express()
-const cors = require('cors')
 
 const ENV = process.env.NODE_ENV || 'development'
 

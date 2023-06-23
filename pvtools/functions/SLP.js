@@ -1,20 +1,16 @@
 
+/** @typedef {import("./calcProfile.js").LoadProfile} LoadProfile */
+
 /**
  * "Standardlastprofil berechnung nach BDEW"
- * weekdays = weekDays (mon - fri)
- * sat = saturday 
- * sun = sunday and free days
- * default = if sat/sun/weekdays not set, default will be used
- * 
- * till = FIRST day this season will change. 03/21 means, this will used until 03/20 (Bug?)
+ *
+ * @type LoadProfile
  */
-
-
 
 const SLPH0 = [
     {
         till: "03/21",
-       
+
         profileDays : {
             sat: {
                 0:	74.75,
